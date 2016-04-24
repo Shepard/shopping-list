@@ -1,3 +1,10 @@
+@import url(libs/material.min.css);
+
+/* See <http://google.github.io/material-design-icons/#setup-method-2-self-hosting>.
+.material-icons is already defined in material.min.css but included here again because it has some differences to that,
+so probably provides better compatibility. */
+@import url(libs/material-icons.css);
+
 main.mdl-layout__content {
 	/* Leave space for the bottom toolbar. */
 	margin-bottom: 67px;
