@@ -24,11 +24,33 @@ main.mdl-layout__content {
 	display: flex;
 }
 
+#lst_items {
+	/* Override user agent style to reduce space at the top. */
+	margin: 0;
+}
+
 #lst_items .mdl-checkbox.is-checked .mdl-checkbox__label {
 	text-decoration: line-through;
 	color: #757575;
 }
 
 #lst_items .mdl-list__item {
-	padding: 8px 16px;
+	/* Reduce space between items. Also make the li smaller and the checkbox bigger so that the checkbox has a larger click area.*/
+	padding: 0 16px;
+	min-height: 0;
+}
+
+#lst_items .mdl-list__item .mdl-checkbox {
+	height: 40px;
+}
+
+/* Adjust positions of helper spans to accomodate for adjusted height. */
+
+#lst_items .mdl-list__item .mdl-checkbox .mdl-checkbox__focus-helper,
+#lst_items .mdl-list__item .mdl-checkbox .mdl-checkbox__box-outline {
+	top: 11px;
+}
+
+#lst_items .mdl-list__item .mdl-checkbox .mdl-checkbox__ripple-container {
+	top: 2px;
 }
