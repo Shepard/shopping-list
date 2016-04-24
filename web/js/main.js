@@ -2,16 +2,33 @@
 
 document.addEventListener("DOMContentLoaded", function() {
 
+	var STORAGE_KEY = "shopping-list";
+	var SERVICE_WORKER_SCOPE = location.pathname;
+
 	var txtNewItem = document.getElementById("txt_new_item");
 	var lstItems = document.getElementById("lst_items");
-
-	var storageKey = "shopping-list";
 
 	var idSet = {};
 
 	var itemList = [];
 
 	initFromStorage();
+
+	if ("serviceWorker" in navigator) {
+		navigator.serviceWorker
+			.register("service-worker.js", {
+				scope: SERVICE_WORKER_SCOPE
+			})
+			.then(function() {
+				console.log("Service Worker registered.");
+			})
+			.catch(function(error) {
+				console.log("Error registering Service Worker.");
+				console.log(error);
+			});
+	} else {
+		console.log("No offline support. :-(");
+	}
 
 	// Event handlers
 
@@ -105,7 +122,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	// Persistence
 
 	function initFromStorage() {
-		var storage = localStorage.getItem(storageKey);
+		var storage = localStorage.getItem(STORAGE_KEY);
 		if (storage) {
 			var shoppingList = JSON.parse(storage);
 			itemList = shoppingList.itemList;
@@ -122,7 +139,7 @@ document.addEventListener("DOMContentLoaded", function() {
 			itemList: itemList
 		};
 		var storage = JSON.stringify(shoppingList);
-		localStorage.setItem(storageKey, storage);
+		localStorage.setItem(STORAGE_KEY, storage);
 	}
 
 	function addItem(text, id) {
