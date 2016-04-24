@@ -9,7 +9,10 @@ document.addEventListener("DOMContentLoaded", function() {
 			return;
 		}
 
-		createVisualItem(value);
+		var listItem = createVisualItem(value);
+
+		// Make sure newly added item is immediately visible.
+		listItem.scrollIntoView();
 
 		// Reset input.
 		txtNewItem.value = "";
@@ -54,5 +57,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 		// Make MDL enhance the element.
 		componentHandler.upgradeElement(label);
+
+		return listItem;
 	}
 });

@@ -12,12 +12,13 @@
 	<script src="js/main.js"></script>
 </head>
 <body>
-	<div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
+	<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--no-drawer-button">
 		<header class="mdl-layout__header">
-			<div class="mdl-layout-icon"></div>
 			<div class="mdl-layout__header-row">
 				<span class="mdl-layout__title">Shopping List</span>
+
 				<div class="mdl-layout-spacer"></div>
+
 				<button id="btn_context_menu" class="mdl-button mdl-js-button mdl-button--icon">
 					<i class="material-icons">more_vert</i>
 				</button>
@@ -28,19 +29,13 @@
 				</ul>
 			</div>
 		</header>
-		<!--
-		<div class="mdl-layout__drawer">
-			<span class="mdl-layout__title">Shopping List</span>
-			<nav class="mdl-navigation">
-				<a class="mdl-navigation__link" href="#">Nav link 2</a>
-				<a class="mdl-navigation__link" href="#">Nav link 2</a>
-				<a class="mdl-navigation__link" href="#">Nav link 3</a>
-			</nav>
-		</div>
-		-->
+
 		<main class="mdl-layout__content">
 			<ul class="mdl-list" id="lst_items">
 			</ul>
+		</main>
+
+		<footer id="tlb_bottom">
 			<form action="#">
 				<div class="mdl-textfield mdl-js-textfield">
 					<input class="mdl-textfield__input" type="text" id="txt_new_item" autofocus>
@@ -49,7 +44,7 @@
 					<i class="material-icons">add</i>
 				</button>
 			</form>
-		</main>
+		</footer>
 	</div>
 </body>
 </html>

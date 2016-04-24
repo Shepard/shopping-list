@@ -1,3 +1,17 @@
+main.mdl-layout__content {
+	/* Leave space for the bottom toolbar. */
+	margin-bottom: 67px;
+}
+
+#tlb_bottom {
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+	box-sizing: border-box;
+	padding: 0 16px;
+	box-shadow: 0 -2px 2px 0 rgba(0,0,0,.14),0 -3px 1px -2px rgba(0,0,0,.2),0 -1px 5px 0 rgba(0,0,0,.12);
+}
+
 #lst_items .mdl-checkbox.is-checked .mdl-checkbox__label {
 	text-decoration: line-through;
 	color: #757575;
