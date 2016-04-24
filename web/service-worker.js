@@ -1,4 +1,4 @@
-const CACHE_VERSION = 1;
+const CACHE_VERSION = 2;
 const CACHE_KEY = "shopping-list-v" + CACHE_VERSION;
 
 self.addEventListener("install", function(event) {
@@ -36,16 +36,28 @@ self.addEventListener("activate", function(event) {
 	);
 });
 
-// When resources are requested, try to fetch them from the cache first.
-// If that fails, fetch them from the network and cache the result.
 self.addEventListener("fetch", function(event) {
+	// When resources are requested, try to fetch them from the cache first.
+	// If that fails, fetch them from the network and cache the result.
+	// event.respondWith(
+	// 	caches.open(CACHE_KEY).then(function(cache) {
+	// 		return cache.match(event.request).then(function (response) {
+	// 			return response || fetch(event.request).then(function(response) {
+	// 				cache.put(event.request, response.clone());
+	// 				return response;
+	// 			});
+	// 		});
+	// 	})
+	// );
+
+	// For now go to network first, caching on success, and fall back to cache if network fails.
 	event.respondWith(
 		caches.open(CACHE_KEY).then(function(cache) {
-			return cache.match(event.request).then(function (response) {
-				return response || fetch(event.request).then(function(response) {
-					cache.put(event.request, response.clone());
-					return response;
-				});
+			return fetch(event.request).then(function(response) {
+				cache.put(event.request, response.clone());
+				return response;
+			}).catch(function() {
+				return cache.match(event.request);
 			});
 		})
 	);
