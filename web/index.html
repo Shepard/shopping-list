@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>Shopping List</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link rel="stylesheet" href="css/libs/material.min.css" />
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+	<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css">
+	<link rel="stylesheet" href="css/main.css" />
+	<script src="js/libs/material.min.js"></script>
+	<script src="js/main.js"></script>
+</head>
+<body>
+	<div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
+		<header class="mdl-layout__header">
+			<div class="mdl-layout-icon"></div>
+			<div class="mdl-layout__header-row">
+				<span class="mdl-layout__title">Shopping List</span>
+				<div class="mdl-layout-spacer"></div>
+				<button id="btn_context_menu" class="mdl-button mdl-js-button mdl-button--icon">
+					<i class="material-icons">more_vert</i>
+				</button>
+
+				<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="btn_context_menu">
+					<li class="mdl-menu__item" id="context_action_remove_all_checked">Remove all checked</li>
+					<li class="mdl-menu__item" id="context_action_remove_all">Remove all</li>
+				</ul>
+			</div>
+		</header>
+		<!--
+		<div class="mdl-layout__drawer">
+			<span class="mdl-layout__title">Shopping List</span>
+			<nav class="mdl-navigation">
+				<a class="mdl-navigation__link" href="#">Nav link 2</a>
+				<a class="mdl-navigation__link" href="#">Nav link 2</a>
+				<a class="mdl-navigation__link" href="#">Nav link 3</a>
+			</nav>
+		</div>
+		-->
+		<main class="mdl-layout__content">
+			<ul class="mdl-list" id="lst_items">
+			</ul>
+			<form action="#">
+				<div class="mdl-textfield mdl-js-textfield">
+					<input class="mdl-textfield__input" type="text" id="txt_new_item" autofocus>
+				</div>
+				<button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored mdl-js-ripple-effect" id="btn_new_item">
+					<i class="material-icons">add</i>
+				</button>
+			</form>
+		</main>
+	</div>
+</body>
+</html>

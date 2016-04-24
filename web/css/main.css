@@ -1,0 +1,4 @@
+#lst_items .mdl-checkbox.is-checked .mdl-checkbox__label {
+	text-decoration: line-through;
+	color: #757575;
+}
