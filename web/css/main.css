@@ -29,22 +29,38 @@ main.mdl-layout__content {
 	margin: 0;
 }
 
-#lst_items .mdl-checkbox.is-checked .mdl-checkbox__label {
-	text-decoration: line-through;
-	color: #757575;
-}
-
 #lst_items .mdl-list__item {
-	/* Reduce space between items. Also make the li smaller and the checkbox bigger so that the checkbox has a larger click area.*/
+	/* Reduce space between items. Also make the li smaller and the checkbox bigger so that the checkbox has a larger click area. */
 	padding: 0 16px;
 	min-height: 0;
+
+	padding-right: 0;
+
+	background-color: white;
+	transition: background-color 300ms;
+
+	/* Make dragging work better by making text unselectable. */
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+
+	/* Prevent native popup on long press. I think. */
+	-webkit-touch-callout: none;
+
+	/* Maybe helps prevent 300ms delay? */
+	touch-action: manipulation;
+}
+
+#lst_items .mdl-list__item.long_press {
+	background-color: gray;
 }
 
 #lst_items .mdl-list__item .mdl-checkbox {
 	height: 40px;
 }
 
-/* Adjust positions of helper spans to accomodate for adjusted height. */
+/* Adjust positions of helper spans to accomodate for adjusted height and padding. */
 
 #lst_items .mdl-list__item .mdl-checkbox .mdl-checkbox__focus-helper,
 #lst_items .mdl-list__item .mdl-checkbox .mdl-checkbox__box-outline {
@@ -53,4 +69,26 @@ main.mdl-layout__content {
 
 #lst_items .mdl-list__item .mdl-checkbox .mdl-checkbox__ripple-container {
 	top: 2px;
+}
+
+/* Style checked items more obviously as done. */
+#lst_items .mdl-checkbox.is-checked .mdl-checkbox__label {
+	text-decoration: line-through;
+	color: #757575;
+}
+
+#lst_items .mdl-list__item .mdl-list__item-secondary-action {
+	height: 40px;
+	text-decoration: none;
+
+	padding-left: 8px;
+	padding-right: 24px;
+
+	/* Make sure drag handle icon is vertically middle-aligned in secondary action (since we increased the height). */
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-align-items: center;
+	-ms-flex-align: center;
+	align-items: center;
 }

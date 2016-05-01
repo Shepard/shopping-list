@@ -1,4 +1,4 @@
-const CACHE_VERSION = 2;
+const CACHE_VERSION = 3;
 const CACHE_KEY = "shopping-list-v" + CACHE_VERSION;
 
 self.addEventListener("install", function(event) {
@@ -13,7 +13,8 @@ self.addEventListener("install", function(event) {
 				"css/libs/material.min.css",
 				"css/libs/material-icons.css",
 				"js/main.js",
-				"js/libs/material.min.js"
+				"js/libs/material.min.js",
+				"js/libs/slip.js"
 			]);
 		})
 	);
