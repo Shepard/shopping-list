@@ -26,6 +26,7 @@ See licence notice included [in the file](https://github.com/Shepard/shopping-li
 
 ## TODO
 
+* Undo in the context menu by saving all previous states of the list.
 * Improve long press (get rid of delay by using touchstart/touchend without interferring with drag&drop).
 * Improve swiping elements out of the list (do any of the undocument options in Slip.js help?).
 * Multiple lists
