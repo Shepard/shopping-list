@@ -88,6 +88,9 @@ main.mdl-layout__content {
 
 #lst_items .mdl-list__item .mdl-checkbox {
 	height: 40px;
+
+	/* Make sure overly long checkbox label doesn't make this grow over the drag handle. */
+	min-width: 0;
 }
 
 /* Adjust positions of helper spans to accomodate for adjusted height and padding. */
@@ -99,6 +102,13 @@ main.mdl-layout__content {
 
 #lst_items .mdl-list__item .mdl-checkbox .mdl-checkbox__ripple-container {
 	top: 2px;
+}
+
+#lst_items .mdl-checkbox .mdl-checkbox__label {
+	/* Restrict to on line, only using the available space and shorten with an ellipsis after that. */
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 /* Style checked items more obviously as done. */
