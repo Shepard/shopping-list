@@ -6,13 +6,19 @@ document.addEventListener("DOMContentLoaded", function() {
 	var SERVICE_WORKER_SCOPE = location.pathname;
 	var LONG_PRESS_DURATION = 300;
 	var LONG_PRESS_VIBRATION_DURATION = 50;
+	var INITIAL_LIST_NAME = "Shopping List";
 
 	var txtNewItem = document.getElementById("txt_new_item");
 	var lstItems = document.getElementById("lst_items");
+	var navMenu = document.getElementById("navigation_menu");
+	var btnAddNewList = document.getElementById("menu_action_add_new_list");
+	var lblTitleElement = document.getElementById("active_list_title");
+	var layout = document.querySelector(".mdl-layout");
 
 	var idSet = {};
 
-	var itemList = [];
+	var activeList = {};
+	var allLists = [];
 
 	var longPressTimer = null;
 
@@ -79,12 +85,73 @@ document.addEventListener("DOMContentLoaded", function() {
 	}, false);
 
 	document.getElementById("context_action_remove_all").addEventListener("click", function() {
-		while (lstItems.firstChild) {
-			lstItems.removeChild(lstItems.firstChild);
-		}
+		// Update UI.
+		emptyVisualList();
 
+		// Update internal storage.
 		clearAllItems();
 	}, false);
+
+	document.getElementById("context_action_rename_list").addEventListener("click", function() {
+		var oldValue = activeList.currentState.name;
+		var newName = prompt("Please enter a new name.", oldValue);
+		if (newName) {
+			// Update UI.
+
+			showActiveListName(newName);
+
+			var navItem = navMenu.querySelector("[data-list-id=" + activeList.id + "]");
+			navItem.textContent = newName;
+
+			// Update internal storage.
+			renameActiveList(newName);
+		}
+	}, false);
+
+	document.getElementById("context_action_delete_list").addEventListener("click", function() {
+		if (confirm("Do you really want to delete this list? This can not be undone.")) {
+			// Update UI.
+
+			emptyVisualList();
+
+			var navItem = navMenu.querySelector("[data-list-id=" + activeList.id + "]");
+			navMenu.removeChild(navItem);
+
+			// Update internal storage.
+			deleteActiveList();
+
+			// TODO mark new active list in menu.
+		}
+	}, false);
+
+	btnAddNewList.addEventListener("click", function(event) {
+		var name = prompt("Please enter a name for the new list.", INITIAL_LIST_NAME);
+		if (name) {
+			createAndLoadList(name);
+		}
+
+		// Close sidebar menu.
+		layout.MaterialLayout.toggleDrawer();
+
+		event.preventDefault();
+		event.stopPropagation();
+	}, false);
+
+	navMenu.addEventListener("click", function(event) {
+		if (event.target && event.target.classList.contains("nav_item")) {
+			emptyVisualList();
+
+			var listId = event.target.dataset.listId;
+			switchToList(listId);
+		}
+
+		// Close sidebar menu.
+		layout.MaterialLayout.toggleDrawer();
+
+		// TODO mark new active list in menu.
+
+		event.preventDefault();
+	});
 
 	lstItems.addEventListener("click", function(event) {
 		if (longPressTimer) {
@@ -192,7 +259,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		// When element was moved to a new position using the drag handle,
 		// permanently move it to that place in the DOM and change the data structure accordingly.
 		event.target.parentNode.insertBefore(event.target, event.detail.insertBefore);
-		reorderElements(event.detail.originalIndex, event.detail.spliceIndex);
+		reorderItems(event.detail.originalIndex, event.detail.spliceIndex);
 	}, false);
 
 	// Add drag&drop behaviour to list items.
@@ -253,31 +320,140 @@ document.addEventListener("DOMContentLoaded", function() {
 		}
 	}
 
+	function showActiveListName(name) {
+		lblTitleElement.textContent = name;
+	}
+
+	function emptyVisualList() {
+		while (lstItems.firstChild) {
+			lstItems.removeChild(lstItems.firstChild);
+		}
+	}
+
+	function addListToMenu(list) {
+		var navItem = document.createElement("a");
+		navItem.href = "#";
+		navItem.className = "mdl-navigation__link nav_item";
+		navItem.dataset.listId = list.id;
+		navItem.appendChild(document.createTextNode(list.currentState.name));
+		navMenu.insertBefore(navItem, btnAddNewList);
+	}
+
+
 	// Persistence
 
 	function initFromStorage() {
 		var storage = localStorage.getItem(STORAGE_KEY);
 		if (storage) {
 			var shoppingList = JSON.parse(storage);
-			itemList = shoppingList.itemList;
 
-			itemList.forEach(function(item) {
-				addExistingId(item.id);
-				createVisualItem(item.text, item.id, item.done);
-			});
+			if (shoppingList.lists) {
+				allLists = shoppingList.lists;
+
+				allLists.forEach(function(list) {
+					if (list.id == shoppingList.activeListId) {
+						loadList(list);
+					}
+
+					addListToMenu(list);
+
+					addExistingId(list.id);
+				});
+			} else {
+				allLists = [];
+			}
+
+			if (!shoppingList.activeListId) {
+				createAndLoadList(INITIAL_LIST_NAME);
+			}
+
+			if (!shoppingList.activeListId || !shoppingList.lists) {
+				saveToStorage();
+			}
 		}
 	}
 
 	function saveToStorage() {
 		var shoppingList = {
-			itemList: itemList
+			"activeListId": activeList.id,
+			"lists": allLists
 		};
 		var storage = JSON.stringify(shoppingList);
 		localStorage.setItem(STORAGE_KEY, storage);
 	}
 
+	// List management
+
+	function createAndLoadList(name) {
+		var newList = createList(name);
+
+		allLists.push(newList);
+
+		loadList(newList);
+
+		addListToMenu(newList);
+	}
+
+	function createList(name) {
+		return {
+			id: getUniqueId(),
+			currentState: {
+				name: name,
+				items: []
+			}
+		};
+	}
+
+	function loadList(list) {
+		activeList = list;
+
+		showActiveListName(list.currentState.name);
+
+		list.currentState.items.forEach(function(item) {
+			addExistingId(item.id);
+			createVisualItem(item.text, item.id, item.done);
+		});
+	}
+
+	function switchToList(id) {
+		allLists.forEach(function(list) {
+			if (list.id == id) {
+				loadList(list);
+			}
+		});
+		saveToStorage();
+	}
+
+	// Managing active list
+
+	function deleteActiveList() {
+		if (activeList) {
+			for (var i = 0; i < allLists.length; i++) {
+				if (allLists[i].id == activeList.id) {
+					allLists.splice(i, 1);
+					break;
+				}
+			}
+
+			if (allLists.length) {
+				loadList(allLists[0]);
+			} else {
+				createAndLoadList(INITIAL_LIST_NAME);
+			}
+
+			saveToStorage();
+		}
+	}
+
+	function renameActiveList(newName) {
+		activeList.currentState.name = newName;
+		saveToStorage();
+	}
+
+	// Managing items in active list
+
 	function getItem(id) {
-		var singleItemList = itemList.filter(function(item) {
+		var singleItemList = activeList.currentState.items.filter(function(item) {
 			return item.id == id;
 		});
 		if (singleItemList.length) {
@@ -287,7 +463,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	}
 
 	function addItem(text, id) {
-		itemList.push({
+		activeList.currentState.items.push({
 			text: text,
 			done: false,
 			id: id
@@ -297,7 +473,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	function updateItem(id, updater) {
 		// .find would be nicer here but isn't as widely supported.
-		itemList.forEach(function(item) {
+		activeList.currentState.items.forEach(function(item) {
 			if (item.id == id) {
 				updater(item);
 			}
@@ -312,21 +488,22 @@ document.addEventListener("DOMContentLoaded", function() {
 	}
 
 	function removeItemWithoutStoring(id) {
-		itemList = itemList.filter(function(item) {
+		activeList.currentState.items = activeList.currentState.items.filter(function(item) {
 			return item.id != id;
 		});
 	}
 
 	function clearAllItems() {
-		itemList = [];
+		activeList.currentState.items = [];
 		saveToStorage();
 	}
 
-	function reorderElements(originalIndex, newIndex) {
+	function reorderItems(originalIndex, newIndex) {
 		// http://stackoverflow.com/a/5306832
-		itemList.splice(newIndex, 0, itemList.splice(originalIndex, 1)[0]);
+		activeList.currentState.items.splice(newIndex, 0, activeList.currentState.items.splice(originalIndex, 1)[0]);
 		saveToStorage();
 	}
+
 
 	// Id generation
 

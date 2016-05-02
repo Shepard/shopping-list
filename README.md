@@ -30,6 +30,5 @@ See licence notice included [in the file](https://github.com/Shepard/shopping-li
 * Improve long press (get rid of delay by using touchstart/touchend without interferring with drag&drop).
 * Improve swiping elements out of the list (do any of the undocument options in Slip.js help?).
 * Nicer web app icon that works better with the main theme colour in the app switcher
-* Multiple lists
 * Syncing with a server for shared editing
 * Test and make work on iOS?

@@ -10,6 +10,32 @@ main.mdl-layout__content {
 	margin-bottom: 67px;
 }
 
+
+.mdl-layout__header-row .mdl-layout__title {
+	/* Shorten overly long names. */
+	text-overflow: ellipsis;
+	overflow-x: hidden;
+	/* overflow-y: visible; */
+	/* Makes the overly long name not continue growing. */
+	flex-shrink: 1;
+	/* http://stackoverflow.com/a/12131365 */
+	min-width: 0;
+	/* Without this, line-height is 1 and Chrome weirdly cuts off the bottom of the text and moves it down a bit when applying overflow-x:hidden. */
+	line-height: 1.5;
+}
+
+
+/* Sidebar menu */
+
+.mdl-layout__drawer .mdl-navigation .mdl-navigation__link {
+	/* Shorten overly long names. */
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+
+
+/* Bottom toolbar */
+
 #tlb_bottom {
 	position: fixed;
 	bottom: 0;
@@ -24,6 +50,9 @@ main.mdl-layout__content {
 #tlb_bottom form {
 	display: flex;
 }
+
+
+/* List */
 
 #lst_items {
 	/* Override user agent style to reduce space at the top. */

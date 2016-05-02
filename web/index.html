@@ -13,10 +13,10 @@
 	<title>Shopping List</title>
 </head>
 <body>
-	<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--no-drawer-button">
+	<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
 		<header class="mdl-layout__header">
 			<div class="mdl-layout__header-row">
-				<span class="mdl-layout__title">Shopping List</span>
+				<span class="mdl-layout__title" id="active_list_title">Shopping List</span>
 
 				<div class="mdl-layout-spacer"></div>
 
@@ -27,9 +27,18 @@
 				<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="btn_context_menu">
 					<li class="mdl-menu__item" id="context_action_remove_all_checked">Remove all checked</li>
 					<li class="mdl-menu__item" id="context_action_remove_all">Remove all</li>
+					<li class="mdl-menu__item" id="context_action_rename_list">Rename list</li>
+					<li class="mdl-menu__item" id="context_action_delete_list">Delete list</li>
 				</ul>
 			</div>
 		</header>
+
+		<div class="mdl-layout__drawer">
+			<span class="mdl-layout__title">Shopping List</span>
+			<nav class="mdl-navigation" id="navigation_menu">
+				<a href="#" class="mdl-navigation__link" id="menu_action_add_new_list"><i class="material-icons">add_circle_outline</i> Add a new list</a>
+			</nav>
+		</div>
 
 		<main class="mdl-layout__content">
 			<ul class="mdl-list" id="lst_items">
