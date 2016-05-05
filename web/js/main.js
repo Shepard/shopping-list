@@ -14,6 +14,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	var btnAddNewList = document.getElementById("menu_action_add_new_list");
 	var lblTitleElement = document.getElementById("active_list_title");
 	var layout = document.querySelector(".mdl-layout");
+	var btnUndo = document.getElementById("context_action_undo");
 
 	var idSet = {};
 
@@ -68,7 +69,34 @@ document.addEventListener("DOMContentLoaded", function() {
 		txtNewItem.focus();
 	}, false);
 
+	btnUndo.addEventListener("click", function() {
+		// Update internal storage.
+		restorePreviousStateOfActiveList();
+
+		// Update UI.
+
+		showActiveListName(activeList.currentState.name);
+
+		var navItem = navMenu.querySelector("[data-list-id=" + activeList.id + "]");
+		navItem.textContent = activeList.currentState.name;
+
+		emptyVisualList();
+
+		activeList.currentState.items.forEach(function(item) {
+			createVisualItem(item.text, item.id, item.done);
+		});
+
+		// Call this with a timeout so that MDL's event handler can go through first.
+		// Otherwise that won't accept the click because the menu item is disabled,
+		// and therefore not close the context menu.
+		setTimeout(function() {
+			setUndoEnabled(activeList.previousStates.length > 0);
+		}, 0);
+	}, false);
+
 	document.getElementById("context_action_remove_all_checked").addEventListener("click", function() {
+		saveCurrentStateOfActiveList();
+
 		var children = Array.prototype.slice.call(lstItems.childNodes);
 		children.forEach(function(child) {
 			if (child.nodeName == "LI") {
@@ -314,6 +342,7 @@ document.addEventListener("DOMContentLoaded", function() {
 			if (newText) {
 				var span = element.querySelector(".mdl-checkbox__label");
 				span.textContent = newText;
+				saveCurrentStateOfActiveList();
 				item.text = newText;
 				saveToStorage();
 			}
@@ -339,37 +368,48 @@ document.addEventListener("DOMContentLoaded", function() {
 		navMenu.insertBefore(navItem, btnAddNewList);
 	}
 
+	function setUndoEnabled(enabled) {
+		if (enabled) {
+			btnUndo.removeAttribute("disabled");
+		} else {
+			btnUndo.setAttribute("disabled", "true");
+		}
+	}
+
 
 	// Persistence
 
 	function initFromStorage() {
 		var storage = localStorage.getItem(STORAGE_KEY);
+		var shoppingList;
 		if (storage) {
-			var shoppingList = JSON.parse(storage);
+			shoppingList = JSON.parse(storage);
+		} else {
+			shoppingList = {};
+		}
 
-			if (shoppingList.lists) {
-				allLists = shoppingList.lists;
+		if (shoppingList.lists) {
+			allLists = shoppingList.lists;
 
-				allLists.forEach(function(list) {
-					if (list.id == shoppingList.activeListId) {
-						loadList(list);
-					}
+			allLists.forEach(function(list) {
+				if (list.id == shoppingList.activeListId) {
+					loadList(list, true);
+				}
 
-					addListToMenu(list);
+				addListToMenu(list);
 
-					addExistingId(list.id);
-				});
-			} else {
-				allLists = [];
-			}
+				addExistingId(list.id);
+			});
+		} else {
+			allLists = [];
+		}
 
-			if (!shoppingList.activeListId) {
-				createAndLoadList(INITIAL_LIST_NAME);
-			}
+		if (!shoppingList.activeListId) {
+			createAndLoadList(INITIAL_LIST_NAME);
+		}
 
-			if (!shoppingList.activeListId || !shoppingList.lists) {
-				saveToStorage();
-			}
+		if (!shoppingList.activeListId || !shoppingList.lists) {
+			saveToStorage();
 		}
 	}
 
@@ -400,28 +440,43 @@ document.addEventListener("DOMContentLoaded", function() {
 			currentState: {
 				name: name,
 				items: []
-			}
+			},
+			previousStates: []
 		};
 	}
 
-	function loadList(list) {
+	function loadList(list, addExistingIds) {
 		activeList = list;
 
 		showActiveListName(list.currentState.name);
 
 		list.currentState.items.forEach(function(item) {
-			addExistingId(item.id);
+			if (addExistingIds) {
+				addExistingId(item.id);
+			}
 			createVisualItem(item.text, item.id, item.done);
 		});
+
+		setUndoEnabled(list.previousStates.length > 0);
+	}
+
+	function getList(id) {
+		var foundList = null;
+		// .find would be nicer here but isn't as widely supported.
+		allLists.forEach(function(list) {
+			if (list.id == id) {
+				foundList = list;
+			}
+		});
+		return foundList;
 	}
 
 	function switchToList(id) {
-		allLists.forEach(function(list) {
-			if (list.id == id) {
-				loadList(list);
-			}
-		});
-		saveToStorage();
+		var list = getList(id);
+		if (list) {
+			loadList(list);
+			saveToStorage();
+		}
 	}
 
 	// Managing active list
@@ -446,8 +501,38 @@ document.addEventListener("DOMContentLoaded", function() {
 	}
 
 	function renameActiveList(newName) {
+		saveCurrentStateOfActiveList();
 		activeList.currentState.name = newName;
 		saveToStorage();
+	}
+
+	function saveCurrentStateOfActiveList() {
+		// Deep copy (rather than Object.assign which is shallow).
+		// Not using JSON stringifying/parsing because it's slow.
+		// Not using a more generic function because the structure is quite simple.
+		var state = {
+			name: activeList.currentState.name,
+			items: []
+		};
+		activeList.currentState.items.forEach(function(item) {
+			var itemCopy = {
+				text: item.text,
+				done: item.done,
+				id: item.id
+			};
+			state.items.push(itemCopy);
+		})
+		activeList.previousStates.push(state);
+
+		setUndoEnabled(true);
+	}
+
+	function restorePreviousStateOfActiveList() {
+		if (activeList.previousStates.length) {
+			var previousState = activeList.previousStates.pop();
+			activeList.currentState = previousState;
+			saveToStorage();
+		}
 	}
 
 	// Managing items in active list
@@ -463,6 +548,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	}
 
 	function addItem(text, id) {
+		saveCurrentStateOfActiveList();
 		activeList.currentState.items.push({
 			text: text,
 			done: false,
@@ -472,17 +558,18 @@ document.addEventListener("DOMContentLoaded", function() {
 	}
 
 	function updateItem(id, updater) {
+		saveCurrentStateOfActiveList();
 		// .find would be nicer here but isn't as widely supported.
 		activeList.currentState.items.forEach(function(item) {
 			if (item.id == id) {
 				updater(item);
 			}
 		});
-
 		saveToStorage();
 	}
 
 	function removeItem(id) {
+		saveCurrentStateOfActiveList();
 		removeItemWithoutStoring(id);
 		saveToStorage();
 	}
@@ -494,11 +581,13 @@ document.addEventListener("DOMContentLoaded", function() {
 	}
 
 	function clearAllItems() {
+		saveCurrentStateOfActiveList();
 		activeList.currentState.items = [];
 		saveToStorage();
 	}
 
 	function reorderItems(originalIndex, newIndex) {
+		saveCurrentStateOfActiveList();
 		// http://stackoverflow.com/a/5306832
 		activeList.currentState.items.splice(newIndex, 0, activeList.currentState.items.splice(originalIndex, 1)[0]);
 		saveToStorage();
@@ -520,4 +609,8 @@ document.addEventListener("DOMContentLoaded", function() {
 		idSet[id] = true;
 		return id;
 	}
+
+	// Ideally would have to remove ids from idSet when restoring an older state or deleting items or a list,
+	// but it's not really worth the hassle, since the space of possible ids is big enough and the set gets
+	// reinitialised when starting the app.
 });
