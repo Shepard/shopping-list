@@ -1,0 +1,30 @@
+{
+	"en": {
+		"app-name": "Shopping List",
+		"initial-list-name": "Shopping List",
+		"context-action-undo": "Undo",
+		"context-action-remove-all-checked": "Remove all checked",
+		"context-action-remove-all": "Remove all",
+		"context-action-rename-list": "Rename list",
+		"rename-prompt-message": "Please enter a new name.",
+		"context-action-delete-list": "Delete list",
+		"delete-confirm-message": "Do you really want to delete this list? This can not be undone.",
+		"menu-action-add-new-list": "Add a new list",
+		"add-prompt-message": "Please enter a name for the new list.",
+		"change-item-text-prompt-message": "Enter new text:"
+	},
+	"de": {
+		"app-name": "Einkaufsliste",
+		"initial-list-name": "Einkaufsliste",
+		"context-action-undo": "Rückgängig",
+		"context-action-remove-all-checked": "Alle markierten entfernen",
+		"context-action-remove-all": "Alle entfernen",
+		"context-action-rename-list": "Liste umbenennen",
+		"rename-prompt-message": "Gib bitte einen neuen Namen ein.",
+		"context-action-delete-list": "Liste löschen",
+		"delete-confirm-message": "Willst Du diese Liste wirklich löschen? Dies kann nicht rückgängig gemacht werden.",
+		"menu-action-add-new-list": "Neue Liste hinzufügen",
+		"add-prompt-message": "Gib bitte einen Namen für die neue Liste ein.",
+		"change-item-text-prompt-message": "Gib bitte einen neuen Text ein."
+	}
+}

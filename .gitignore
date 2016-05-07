@@ -1,2 +1,3 @@
 shopping-list.sublime-project
 shopping-list.sublime-workspace
+node_modules/**

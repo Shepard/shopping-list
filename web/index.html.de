@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
 	<meta charset="utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,14 +10,14 @@
 	<script src="js/libs/material.min.js"></script>
 	<script src="js/libs/slip.js"></script>
 	<script src="js/main.js"></script>
-	<title>Shopping List</title>
+	<title>Einkaufsliste</title>
 </head>
 <body>
 	<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
 		<header class="mdl-layout__header">
 			<div class="mdl-layout__header-row">
 				<span class="mdl-layout__title" id="active_list_title"
-					data-initial-list-name="Shopping List">Shopping List</span>
+					data-initial-list-name="Einkaufsliste">Einkaufsliste</span>
 
 				<div class="mdl-layout-spacer"></div>
 
@@ -26,27 +26,27 @@
 				</button>
 
 				<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="btn_context_menu">
-					<li class="mdl-menu__item" id="context_action_undo">Undo</li>
-					<li class="mdl-menu__item" id="context_action_remove_all_checked">Remove all checked</li>
-					<li class="mdl-menu__item" id="context_action_remove_all">Remove all</li>
+					<li class="mdl-menu__item" id="context_action_undo">Rückgängig</li>
+					<li class="mdl-menu__item" id="context_action_remove_all_checked">Alle markierten entfernen</li>
+					<li class="mdl-menu__item" id="context_action_remove_all">Alle entfernen</li>
 					<li class="mdl-menu__item" id="context_action_rename_list"
-						data-rename-prompt-message="Please enter a new name.">Rename list</li>
+						data-rename-prompt-message="Gib bitte einen neuen Namen ein.">Liste umbenennen</li>
 					<li class="mdl-menu__item" id="context_action_delete_list"
-						data-delete-confirm-message="Do you really want to delete this list? This can not be undone.">Delete list</li>
+						data-delete-confirm-message="Willst Du diese Liste wirklich löschen? Dies kann nicht rückgängig gemacht werden.">Liste löschen</li>
 				</ul>
 			</div>
 		</header>
 
 		<div class="mdl-layout__drawer">
-			<span class="mdl-layout__title">Shopping List</span>
+			<span class="mdl-layout__title">Einkaufsliste</span>
 			<nav class="mdl-navigation" id="navigation_menu">
 				<a href="#" class="mdl-navigation__link" id="menu_action_add_new_list"
-					data-add-prompt-message="Please enter a name for the new list."><i class="material-icons">add_circle_outline</i> Add a new list</a>
+					data-add-prompt-message="Gib bitte einen Namen für die neue Liste ein."><i class="material-icons">add_circle_outline</i> Neue Liste hinzufügen</a>
 			</nav>
 		</div>
 
 		<main class="mdl-layout__content">
-			<ul class="mdl-list" id="lst_items" data-change-item-text-prompt-message="Please enter a new text.">
+			<ul class="mdl-list" id="lst_items" data-change-item-text-prompt-message="Gib bitte einen neuen Text ein.">
 			</ul>
 		</main>
 

@@ -5,7 +5,16 @@ A "progressive web app" that implements a simple shopping list stored locally vi
 
 Uses Material Design Lite for an Android-like look, Slip.js for drag&drop interactions and is written in vanilla JavaScript otherwise.
 
+## Deployment
+
 To self-host simply host all files in the web directory on a static web server that has https enabled. Offline capabilities only work when accessed via https.
+
+The page is translated into English and German. If you have Apache with `mod_negotiation` enabled and the option `MultiViews` turned on, it will automatically pick the right file to send to the client. The web folder includes a `.htaccess` file that will turn this option on for you but be aware that the web server might not allow overriding this option or might not even allow `.htaccess` files. If your web server can't do this sort of negotiation, rename one of the translated index files to `index.html`.
+
+A Node build script for creating the translated page is included. This project already contains the built translated files, but if you want to run the build anyway, you will need Node 6+ and run the following commands in the root directory of this project:
+
+   npm install
+   npm run-script build
 
 ## Licencing
 
