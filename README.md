@@ -13,8 +13,8 @@ The page is translated into English and German. If you have Apache with `mod_neg
 
 A Node build script for creating the translated page is included. This project already contains the built translated files, but if you want to run the build anyway, you will need Node 6+ and run the following commands in the root directory of this project:
 
-   npm install
-   npm run-script build
+    npm install
+    npm run-script build
 
 ## Licencing
 
