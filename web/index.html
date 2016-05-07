@@ -16,7 +16,8 @@
 	<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
 		<header class="mdl-layout__header">
 			<div class="mdl-layout__header-row">
-				<span class="mdl-layout__title" id="active_list_title">Shopping List</span>
+				<span class="mdl-layout__title" id="active_list_title"
+					data-initial-list-name="Shopping List">Shopping List</span>
 
 				<div class="mdl-layout-spacer"></div>
 
@@ -28,8 +29,10 @@
 					<li class="mdl-menu__item" id="context_action_undo">Undo</li>
 					<li class="mdl-menu__item" id="context_action_remove_all_checked">Remove all checked</li>
 					<li class="mdl-menu__item" id="context_action_remove_all">Remove all</li>
-					<li class="mdl-menu__item" id="context_action_rename_list">Rename list</li>
-					<li class="mdl-menu__item" id="context_action_delete_list">Delete list</li>
+					<li class="mdl-menu__item" id="context_action_rename_list"
+						data-rename-prompt-message="Please enter a new name.">Rename list</li>
+					<li class="mdl-menu__item" id="context_action_delete_list"
+						data-delete-confirm-message="Do you really want to delete this list? This can not be undone.">Delete list</li>
 				</ul>
 			</div>
 		</header>
@@ -37,12 +40,13 @@
 		<div class="mdl-layout__drawer">
 			<span class="mdl-layout__title">Shopping List</span>
 			<nav class="mdl-navigation" id="navigation_menu">
-				<a href="#" class="mdl-navigation__link" id="menu_action_add_new_list"><i class="material-icons">add_circle_outline</i> Add a new list</a>
+				<a href="#" class="mdl-navigation__link" id="menu_action_add_new_list"
+					data-add-prompt-message="Please enter a name for the new list."><i class="material-icons">add_circle_outline</i> Add a new list</a>
 			</nav>
 		</div>
 
 		<main class="mdl-layout__content">
-			<ul class="mdl-list" id="lst_items">
+			<ul class="mdl-list" id="lst_items" data-change-item-text-prompt-message="Please enter a new text.">
 			</ul>
 		</main>
 

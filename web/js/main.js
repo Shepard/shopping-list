@@ -6,7 +6,6 @@ document.addEventListener("DOMContentLoaded", function() {
 	var SERVICE_WORKER_SCOPE = location.pathname;
 	var LONG_PRESS_DURATION = 300;
 	var LONG_PRESS_VIBRATION_DURATION = 50;
-	var INITIAL_LIST_NAME = "Shopping List";
 
 	var txtNewItem = document.getElementById("txt_new_item");
 	var lstItems = document.getElementById("lst_items");
@@ -15,6 +14,11 @@ document.addEventListener("DOMContentLoaded", function() {
 	var lblTitleElement = document.getElementById("active_list_title");
 	var layout = document.querySelector(".mdl-layout");
 	var btnUndo = document.getElementById("context_action_undo");
+	var btnRenameList = document.getElementById("context_action_rename_list");
+	var btnDeleteList = document.getElementById("context_action_delete_list");
+
+	var initialListName = lblTitleElement.dataset.initialListName;
+	var changeItemTextPromptMessage = lstItems.dataset.changeItemTextPromptMessage;
 
 	var idSet = {};
 
@@ -120,9 +124,9 @@ document.addEventListener("DOMContentLoaded", function() {
 		clearAllItems();
 	}, false);
 
-	document.getElementById("context_action_rename_list").addEventListener("click", function() {
+	btnRenameList.addEventListener("click", function() {
 		var oldValue = activeList.currentState.name;
-		var newName = prompt("Please enter a new name.", oldValue);
+		var newName = prompt(btnRenameList.dataset.renamePromptMessage, oldValue);
 		if (newName) {
 			// Update UI.
 
@@ -136,8 +140,8 @@ document.addEventListener("DOMContentLoaded", function() {
 		}
 	}, false);
 
-	document.getElementById("context_action_delete_list").addEventListener("click", function() {
-		if (confirm("Do you really want to delete this list? This can not be undone.")) {
+	btnDeleteList.addEventListener("click", function() {
+		if (confirm(btnDeleteList.dataset.deleteConfirmMessage)) {
 			// Update UI.
 
 			emptyVisualList();
@@ -153,7 +157,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	}, false);
 
 	btnAddNewList.addEventListener("click", function(event) {
-		var name = prompt("Please enter a name for the new list.", INITIAL_LIST_NAME);
+		var name = prompt(btnAddNewList.dataset.addPromptMessage, initialListName);
 		if (name) {
 			createAndLoadList(name);
 		}
@@ -338,7 +342,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		var item = getItem(element.id);
 		if (item) {
 			var oldValue = item.text;
-			var newText = prompt("Please enter a new text.", oldValue);
+			var newText = prompt(changeItemTextPromptMessage, oldValue);
 			if (newText) {
 				var span = element.querySelector(".mdl-checkbox__label");
 				span.textContent = newText;
@@ -405,7 +409,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		}
 
 		if (!shoppingList.activeListId) {
-			createAndLoadList(INITIAL_LIST_NAME);
+			createAndLoadList(initialListName);
 		}
 
 		if (!shoppingList.activeListId || !shoppingList.lists) {
@@ -493,7 +497,7 @@ document.addEventListener("DOMContentLoaded", function() {
 			if (allLists.length) {
 				loadList(allLists[0]);
 			} else {
-				createAndLoadList(INITIAL_LIST_NAME);
+				createAndLoadList(initialListName);
 			}
 
 			saveToStorage();
