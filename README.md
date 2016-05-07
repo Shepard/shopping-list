@@ -20,7 +20,7 @@ A Node build script for creating the translated page is included. This project a
 
 This project's own code and files are licenced under the [MIT Licence](https://github.com/Shepard/shopping-list/blob/master/LICENSE).
 
-All files in the web/css/libs and web/js/libs directories, as well as the icons in the web/img directory, are included from third parties and do not fall under this licence.
+All files in the web/css/libs and web/js/libs directories, as well as the icons in the web/img directory, are included from third parties and do not fall under this licence. The icons have been adjusted from their original versions to work better as app icons.
 
 Material Design Lite:
 © Google, 2015. Licenced under an
