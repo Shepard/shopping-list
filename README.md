@@ -32,11 +32,3 @@ See licence notice included [in the file](https://github.com/Shepard/shopping-li
 
 [Material icons](https://design.google.com/icons/) font as well as the shopping cart icon used as a web app icon:
 © Google. [CC-BY](https://creativecommons.org/licenses/by/4.0/)
-
-## TODO
-
-* Improve long press (get rid of delay by using touchstart/touchend without interferring with drag&drop).
-* Improve swiping elements out of the list (do any of the undocumented options in Slip.js help?).
-* Nicer web app icon that works better with the main theme colour in the app switcher
-* Syncing with a server for shared editing
-* Test and make work on iOS?
