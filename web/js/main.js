@@ -50,7 +50,18 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	// Event handlers
 
-	document.getElementById("btn_new_item").addEventListener("click", function() {
+	// Cancel mousedown event on button to stop it from stealing the focus from the text field
+	// and thus closing the keyboard.
+	document.getElementById("btn_new_item").addEventListener("mousedown", function(event) {
+		event.preventDefault();
+		event.stopPropagation();
+	}, false);
+
+	document.getElementById("form_new_item").addEventListener("submit", function(event) {
+		// Prevent form submission.
+		event.preventDefault();
+		event.stopPropagation();
+
 		var value = txtNewItem.value.trim();
 
 		if (value == "") {
@@ -70,7 +81,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
 		// Reset input.
 		txtNewItem.value = "";
-		txtNewItem.focus();
 	}, false);
 
 	btnUndo.addEventListener("click", function() {
