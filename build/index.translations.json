@@ -17,7 +17,7 @@
 		"app-name": "Einkaufsliste",
 		"initial-list-name": "Einkaufsliste",
 		"context-action-undo": "Rückgängig",
-		"context-action-remove-all-checked": "Alle markierten entfernen",
+		"context-action-remove-all-checked": "Erledigte entfernen",
 		"context-action-remove-all": "Alle entfernen",
 		"context-action-rename-list": "Liste umbenennen",
 		"rename-prompt-message": "Gib bitte einen neuen Namen ein.",

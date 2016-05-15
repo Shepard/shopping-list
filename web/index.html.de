@@ -27,7 +27,7 @@
 
 				<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="btn_context_menu">
 					<li class="mdl-menu__item" id="context_action_undo">Rückgängig</li>
-					<li class="mdl-menu__item" id="context_action_remove_all_checked">Alle markierten entfernen</li>
+					<li class="mdl-menu__item" id="context_action_remove_all_checked">Erledigte entfernen</li>
 					<li class="mdl-menu__item" id="context_action_remove_all">Alle entfernen</li>
 					<li class="mdl-menu__item" id="context_action_rename_list"
 						data-rename-prompt-message="Gib bitte einen neuen Namen ein.">Liste umbenennen</li>
