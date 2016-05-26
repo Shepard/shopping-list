@@ -169,7 +169,11 @@ document.addEventListener("DOMContentLoaded", function() {
 	btnAddNewList.addEventListener("click", function(event) {
 		var name = prompt(btnAddNewList.dataset.addPromptMessage, initialListName);
 		if (name) {
+			emptyVisualList();
+
 			createAndLoadList(name);
+
+			saveToStorage();
 		}
 
 		// Close sidebar menu.
