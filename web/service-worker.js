@@ -1,4 +1,4 @@
-const CACHE_VERSION = 3;
+const CACHE_VERSION = 5;
 const CACHE_KEY = "shopping-list-v" + CACHE_VERSION;
 
 self.addEventListener("install", function(event) {
@@ -38,28 +38,41 @@ self.addEventListener("activate", function(event) {
 });
 
 self.addEventListener("fetch", function(event) {
-	// When resources are requested, try to fetch them from the cache first.
-	// If that fails, fetch them from the network and cache the result.
-	// event.respondWith(
-	// 	caches.open(CACHE_KEY).then(function(cache) {
-	// 		return cache.match(event.request).then(function (response) {
-	// 			return response || fetch(event.request).then(function(response) {
-	// 				cache.put(event.request, response.clone());
-	// 				return response;
-	// 			});
-	// 		});
-	// 	})
-	// );
+	// console.log("Received request for " + event.request.url);
 
-	// For now go to network first, caching on success, and fall back to cache if network fails.
+	// When resources are requested, try to fetch them from the cache first.
+	// Also trigger a fetch request to update the resource from the network and cache the result.
+	// If the cache match fails, wait for the network fetch to finish and return its result.
 	event.respondWith(
 		caches.open(CACHE_KEY).then(function(cache) {
-			return fetch(event.request).then(function(response) {
-				cache.put(event.request, response.clone());
-				return response;
-			}).catch(function() {
-				return cache.match(event.request);
+			return cache.match(event.request).then(function(response) {
+				var fetchPromise = fetch(event.request).then(function(response) {
+					cache.put(event.request, response.clone());
+					return response;
+				});
+				return response || fetchPromise;
 			});
+		}).catch(function(error) {
+			console.log("Cache is broken!");
+			throw error;
 		})
 	);
+
+	// Go to network first, caching on success, and fall back to cache if network fails.
+	// event.respondWith(
+	// 	caches.open(CACHE_KEY).then(function(cache) {
+	// 		return fetch(event.request).then(function(response) {
+	// 			console.log("Responding to request for " + event.request.url + " with network result.");
+	// 			cache.put(event.request, response.clone());
+	// 			return response;
+	// 		}).catch(function(error) {
+	// 			console.log("Network request failed for " + event.request.url + ", using cache. Error was:");
+	// 			console.log(error);
+	// 			return cache.match(event.request);
+	// 		});
+	// 	}).catch(function(error) {
+	// 		console.log("Cache is broken!");
+	// 		throw error;
+	// 	})
+	// );
 });

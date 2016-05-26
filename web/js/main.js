@@ -3,7 +3,6 @@
 document.addEventListener("DOMContentLoaded", function() {
 
 	var STORAGE_KEY = "shopping-list";
-	var SERVICE_WORKER_SCOPE = location.pathname;
 	var LONG_PRESS_DURATION = 300;
 	var LONG_PRESS_VIBRATION_DURATION = 50;
 
@@ -35,7 +34,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	if ("serviceWorker" in navigator) {
 		navigator.serviceWorker
 			.register("service-worker.js", {
-				scope: SERVICE_WORKER_SCOPE
+				scope: "./"
 			})
 			.then(function() {
 				console.log("Service Worker registered.");
